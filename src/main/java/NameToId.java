@@ -4,9 +4,7 @@ import com.google.gson.stream.JsonReader;
 import java.io.*;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Properties;
+import java.util.*;
 
 /**
  * Created by Jan on 22.12.2016.
@@ -132,9 +130,30 @@ public class NameToId {
         }
         return 1;
     }
+
     public int getId(String name, int Cadency) throws Exception {
         loadFileToMap(Cadency);
         int id = idFromMap(name, Cadency);
         return id;
     }
+
+    public LinkedList getListOfIds(int cadency) throws IOException {
+        loadFileToMap(cadency);
+        LinkedList<Integer> list = null;
+        if (cadency==7){
+            list = new LinkedList<Integer>();
+            for(String value : nameMap7.values()){
+                list.add(Integer.parseInt(value));
+            }
+        }
+        if (cadency==8){
+            list = new LinkedList<Integer>();
+            for(String value : nameMap8.values()){
+                list.add(Integer.parseInt(value));
+            }
+        }
+        return list;
+
+    }
+
 }
