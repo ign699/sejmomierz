@@ -9,14 +9,16 @@ import java.util.Date;
  */
 public class Main {
     public static void main(String[] args) throws Exception {
-        final long startTime = System.nanoTime();
         NameToId nameToId = new NameToId();
         System.out.println(nameToId.getId("Jarosław Kaczyński", 7));
         PoselSpendingsSummary posel = new PoselSpendingsSummary(nameToId.getId("Jarosław Kaczyński", 7), 7);
         System.out.println(posel.getTotalSpendings());
 
-        final long duration = System.nanoTime() - startTime;
 
+        final long startTime = System.nanoTime();
+        AllPosels posels = new AllPosels(7);
+        System.out.println(posels.getAvgSpendings());
+        final long duration = System.nanoTime() - startTime;
         System.out.println(duration/1000000000);
     }
 }
