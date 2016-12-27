@@ -1,4 +1,6 @@
+import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileReader;
 import java.io.IOException;
 import java.util.LinkedList;
 import java.util.Properties;
@@ -10,14 +12,14 @@ public class AllPosels {
     private NameToId ids = new NameToId();
     private int cadency;
 
-    public AllPosels(int cadency){
-        this.cadency=cadency;
+    public AllPosels(int cadency) {
+        this.cadency = cadency;
     }
 
     public void reloadCadencyEarnings() throws IOException {
         Properties properties = new Properties();
         LinkedList<Integer> list = ids.getListOfIds(7);
-        for(int i : list){
+        for (int i : list) {
             PoselSpendingsSummary posel = new PoselSpendingsSummary(i, 7);
             properties.put(Integer.toString(i), Double.toString(posel.getTotalSpendings()));
         }
@@ -27,7 +29,7 @@ public class AllPosels {
 
         list = ids.getListOfIds(8);
         properties = new Properties();
-        for(int i : list){
+        for (int i : list) {
             PoselSpendingsSummary posel = new PoselSpendingsSummary(i, 8);
             properties.put(Integer.toString(i), Double.toString(posel.getTotalSpendings()));
         }
@@ -38,15 +40,30 @@ public class AllPosels {
 
     private double calculateAvg() throws IOException {
         double sum = 0;
-        LinkedList<Integer> list = ids.getListOfIds(cadency);
-        for(int i : list){
-            PoselSpendingsSummary posel = new PoselSpendingsSummary(i, cadency);
-            sum+=posel.getTotalSpendings();
+        int howMany = 0;
+        Properties properties = new Properties();
+        String path = "src/main/java/cadency" + cadency + "Spendings.properties";
+        try {
+            properties.load(new FileInputStream(path));
+            for (String key : properties.stringPropertyNames()) {
+                sum += Double.parseDouble(properties.getProperty(key));
+                howMany++;
+            }
+            return sum/howMany;
+
+        } catch (IOException e) {
+            reloadCadencyEarnings();
+            properties.load(new FileInputStream(path));
+            for (String key : properties.stringPropertyNames()) {
+                sum += Double.parseDouble(properties.getProperty(key));
+                howMany++;
+            }
+            return sum / howMany;
         }
-        return sum/list.size();
     }
 
     public double getAvgSpendings() throws IOException {
+
         return calculateAvg();
     }
 }

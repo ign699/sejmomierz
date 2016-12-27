@@ -37,8 +37,8 @@ public class PoselSpendingsSummary {
         }
     }
 
-    private int sumArrayOfStrings(String[] array){
-        int sum = 0;
+    private double sumArrayOfStrings(String[] array){
+        double sum = 0;
         for(String i : array){
             sum += Double.parseDouble(i);
         }
