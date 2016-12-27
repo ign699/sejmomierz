@@ -5,6 +5,7 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.Properties;
 
 /**
  * Created by Jan on 25.12.2016.
@@ -34,7 +35,6 @@ public class PoselSpendingsSummary {
                 addToMinor(r.getPola());
             }
         }
-
     }
 
     private int sumArrayOfStrings(String[] array){
