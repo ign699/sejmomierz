@@ -11,10 +11,11 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         final long startTime = System.nanoTime();
-        AllPosels posels = new AllPosels(8);
-        System.out.println(posels.getAvgSpendings());
-        NameToId name = new NameToId();
-        System.out.println(name.getId("Jarosław Kaczyński", 8));
+        PoselWyjazdySummary posel = new PoselWyjazdySummary(7, 320);
+        System.out.println(posel.getNumberOfDepartures());
+        System.out.println(posel.getDaysAbroad());
+        System.out.println(posel.getMostExpesive());
+        System.out.println(posel.isBeenToItaly());
         final long duration = System.nanoTime() - startTime;
         System.out.println(duration/1000000000);
     }
