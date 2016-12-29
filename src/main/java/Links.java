@@ -38,9 +38,4 @@ public class Links {
         this.self = self;
     }
 
-    @Override
-    public String toString()
-    {
-        return "ClassPojo [last = "+last+", next = "+next+", self = "+self+"]";
-    }
 }

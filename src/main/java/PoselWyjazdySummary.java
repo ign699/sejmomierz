@@ -25,7 +25,7 @@ public class PoselWyjazdySummary {
     private int numberOfDepartures = 0;
     private int daysAbroad = 0;
     private double mostExpesive = 0;
-    private boolean beenToItaly;
+    private boolean beenToItaly = false;
 
     public PoselWyjazdySummary(int cadency, int id) throws IOException, ParseException {
         this.cadency = cadency;
@@ -33,8 +33,13 @@ public class PoselWyjazdySummary {
         this.cadency = cadency;
         URL url = new URL("https://api-v3.mojepanstwo.pl/dane/poslowie/" + this.id + ".json?layers[]=wyjazdy");
         Gson gson = new Gson();
-        wyjazdy = gson.fromJson(new JsonReader(new InputStreamReader(url.openStream())), PoselWyjazdy.class);
-        extractData();
+        try {
+            wyjazdy = gson.fromJson(new JsonReader(new InputStreamReader(url.openStream())), PoselWyjazdy.class);
+            extractData();
+        }
+        catch (Exception e){
+
+        }
     }
 
     private void extractData() throws ParseException {

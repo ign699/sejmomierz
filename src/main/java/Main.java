@@ -11,11 +11,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         final long startTime = System.nanoTime();
-        PoselWyjazdySummary posel = new PoselWyjazdySummary(7, 320);
+        /*PoselWyjazdySummary posel = new PoselWyjazdySummary(7, 14);
         System.out.println(posel.getNumberOfDepartures());
         System.out.println(posel.getDaysAbroad());
         System.out.println(posel.getMostExpesive());
-        System.out.println(posel.isBeenToItaly());
+        System.out.println(posel.isBeenToItaly());*/
+        TravelStatistcs travelStatistcs = new TravelStatistcs(7);
+        travelStatistcs.loadTravelData(8);
         final long duration = System.nanoTime() - startTime;
         System.out.println(duration/1000000000);
     }
