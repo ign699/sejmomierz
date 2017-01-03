@@ -18,6 +18,7 @@ public class Main {
         System.out.println(posel.isBeenToItaly());*/
         TravelStatistcs travelStatistcs = new TravelStatistcs(7);
         travelStatistcs.loadTravelData(8);
+        travelStatistcs.loadTravelData(7);
         final long duration = System.nanoTime() - startTime;
         System.out.println(duration/1000000000);
     }

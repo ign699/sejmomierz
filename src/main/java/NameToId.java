@@ -82,9 +82,7 @@ public class NameToId {
         Properties properties = new Properties();
         try{
             properties.load(new FileInputStream("src/main/java/Ids7.properties"));
-            for(String key: properties.stringPropertyNames()){
-                nameMap7.put(key, properties.getProperty(key).toString());
-            }
+            Utils.propertiesToMap(properties, nameMap7);
         }
         catch(IOException e){
             updateIdList();
