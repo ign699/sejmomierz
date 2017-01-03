@@ -9,85 +9,97 @@ import java.util.Properties;
  * Created by Jan on 27.12.2016.
  */
 public class TravelStatistcs {
-    private Map<String, String> mostSpent = new HashMap<String, String>();
-    private Map<String, String> beenToItaly = new HashMap<String, String>();
-    private Map<String, String> numberOfTravels = new HashMap<String, String>();
-    private Map<String, String> mostTimeAbroad = new HashMap<String, String>();
     private Map<String, String> mosts = new HashMap<String, String>();
     private int cadency;
+    private double mostSpent = 0;
+    private String mostSpentName;
+    private String beenToItaly ="";
+    private int mostTravels = 0;
+    private String mostTravelsName;
+    private int mostDaysAbroad = 0;
+    private String mostDaysAbroadName;
     private NameToId ids = new NameToId();
+    private LinkedList<Integer> list ;
 
 
-    public TravelStatistcs(int cadency){
+    public TravelStatistcs(int cadency) throws IOException, ParseException {
         this.cadency = cadency;
+        list = ids.getListOfIds(cadency);
+        try{
+            FileInputStream in = new FileInputStream("src/main/java/stats"+cadency+".properties");
+            Properties properties = new Properties();
+            properties.load(in);
+            Utils.propertiesToMap(properties, mosts);
+        }
+        catch (Exception e){
+            reloadData();
+        }
     }
 
-    private void addPoselsDataToMaps(LinkedList<Integer> list) throws IOException, ParseException {
+    public void reloadData() throws IOException, ParseException {
 
         for(int id : list){
-            String idS = Integer.toString(id);
             PoselWyjazdySummary posel = new PoselWyjazdySummary(cadency, id);
-            mostSpent.put(idS, Double.toString(posel.getMostExpesive()));
-            beenToItaly.put(idS, Boolean.toString(posel.isBeenToItaly()));
-            numberOfTravels.put(idS, Integer.toString(posel.getNumberOfDepartures()));
-            mostTimeAbroad.put(idS, Integer.toString(posel.getDaysAbroad()));
+            updateBeenToItaly(posel);
+            updateMostDaysAbroad(posel);
+            updateMostSpent(posel);
+            updateMostTravels(posel);
          }
+
+         saveDataToFile();
     }
 
-    private void createMostSpendFile() throws IOException {
+    private void saveDataToFile() throws IOException {
         Properties properties = new Properties();
-        properties.putAll(mostSpent);
+        properties.put("mostSpent", mostSpentName + " spent " + mostSpent);
+        properties.put("beenToItaly", beenToItaly);
+        properties.put("mostDaysAbroad", mostDaysAbroadName + " spend " + mostDaysAbroad + " abroad");
+        properties.put("mostTravels", mostTravelsName + " was on " + mostTravels +" travels");
 
-        String path = "src/main/java/mostSpent" + cadency + ".properties";
+        String path = "src/main/java/stats" + cadency + ".properties";
         FileOutputStream data = new FileOutputStream(path);
         properties.store(data, null);
         data.close();
     }
-
-    private void createBeenToItalyFile() throws IOException {
-        Properties properties = new Properties();
-        properties.putAll(beenToItaly);
-
-        String path = "src/main/java/beenToItaly" + cadency + ".properties";
-        FileOutputStream data = new FileOutputStream(path);
-        properties.store(data, null);
-        data.close();
-
+    private void updateMostSpent(PoselWyjazdySummary posel){
+        if(posel.getMostExpesive() > mostSpent ){
+            mostSpent = posel.getMostExpesive();
+            mostSpentName = posel.getName();
+        }
     }
 
-    private void createNumberOfTravelsFile() throws IOException {
-        Properties properties = new Properties();
-        properties.putAll(numberOfTravels);
-
-        String path = "src/main/java/numberOfTravels" + cadency + ".properties";
-        FileOutputStream data = new FileOutputStream(path);
-        properties.store(data, null);
-        data.close();
-
+    private void updateMostDaysAbroad(PoselWyjazdySummary posel){
+        if(posel.getDaysAbroad() > mostDaysAbroad){
+            mostDaysAbroad = posel.getDaysAbroad();
+            mostDaysAbroadName = posel.getName();
+        }
     }
 
-    private void createMostTimeAbroadFile() throws IOException {
-        Properties properties = new Properties();
-        properties.putAll(mostTimeAbroad);
-
-        String path = "src/main/java/mostTimeAbroad" + cadency + ".properties";
-        FileOutputStream data = new FileOutputStream(path);
-        properties.store(new FileOutputStream(path), null);
-        data.close();
+    private void updateBeenToItaly(PoselWyjazdySummary posel){
+        if(posel.isBeenToItaly()){
+            beenToItaly += posel.getName() + "\n";
+        }
     }
 
-    private void createFiles() throws IOException {
-        createBeenToItalyFile();
-        createMostSpendFile();
-        createMostTimeAbroadFile();
-        createNumberOfTravelsFile();
+    private void updateMostTravels(PoselWyjazdySummary posel){
+        if(posel.getNumberOfDepartures() > mostTravels){
+            mostTravels = posel.getNumberOfDepartures();
+            mostTravelsName = posel.getName();
+        }
     }
 
-    public void loadTravelData() throws IOException, ParseException {
-        LinkedList<Integer> list = ids.getListOfIds(cadency);
-        addPoselsDataToMaps(list);
-        createFiles();
+    public String getBeenToItaly(){
+        return mosts.get("beenToItaly");
     }
 
+    public String getMostSpent(){
+        return mosts.get("mostSpent");
+    }
+    public String getMostTravels(){
+        return mosts.get("mostTravels");
+    }
+    public String getMostDaysAbroad(){
+        return mosts.get("mostDaysAbroad");
+    }
 
 }

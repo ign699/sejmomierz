@@ -21,6 +21,7 @@ import java.util.concurrent.TimeUnit;
 public class PoselWyjazdySummary {
     private int cadency;
     private int id;
+    private String name;
     private PoselWyjazdy wyjazdy;
     private int numberOfDepartures = 0;
     private int daysAbroad = 0;
@@ -30,7 +31,6 @@ public class PoselWyjazdySummary {
     public PoselWyjazdySummary(int cadency, int id) throws IOException, ParseException {
         this.cadency = cadency;
         this.id = id;
-        this.cadency = cadency;
         URL url = new URL("https://api-v3.mojepanstwo.pl/dane/poslowie/" + this.id + ".json?layers[]=wyjazdy");
         Gson gson = new Gson();
         try {
@@ -64,6 +64,7 @@ public class PoselWyjazdySummary {
                 checkIfBeenToItaly(wyjazd);
             }
         }
+        name = wyjazdy.getData().getNazwa();
     }
 
     public  int getNumberOfDepartures(){
@@ -108,5 +109,9 @@ public class PoselWyjazdySummary {
 
     public boolean isBeenToItaly() {
         return beenToItaly;
+    }
+
+    public String getName(){
+        return this.name;
     }
 }
