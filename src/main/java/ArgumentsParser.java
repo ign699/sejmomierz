@@ -1,3 +1,5 @@
+import sun.reflect.annotation.ExceptionProxy;
+
 import javax.lang.model.element.Name;
 import java.io.IOException;
 import java.text.ParseException;
@@ -21,8 +23,11 @@ public class ArgumentsParser {
 
 
 
-    public ArgumentsParser(String[] arguments){
+    public ArgumentsParser(String[] arguments) throws Exception {
         this.arguments = arguments;
+        if(arguments.length == 0){
+            throw new Exception("Please use options");
+        }
     }
 
 
@@ -52,6 +57,9 @@ public class ArgumentsParser {
         }
 
     }
+    private void addLine(){
+        System.out.println("---------------------------------------");
+    }
     private void reload() throws IOException, ParseException {
         NameToId names = new NameToId();
         names.updateIdList();
@@ -77,8 +85,8 @@ public class ArgumentsParser {
             catch (Exception e){
                 throw new Exception("No such posel in given cadency");
             }
-            PoselSpendingsSummary wydatki = new PoselSpendingsSummary(id, kadencja);
-            System.out.println(nazwa + " łącznie wydał " + wydatki.getTotalSpendings());
+            System.out.println(nazwa + " łącznie wydał " + spendings.getSepndings(id));
+            addLine();
         }
         if(littlespendings){
             int id;
@@ -88,29 +96,37 @@ public class ArgumentsParser {
             catch (Exception e){
                 throw new Exception("No such posel in given cadency");
             }
-            PoselSpendingsSummary wydatki = new PoselSpendingsSummary(id, kadencja);
-            System.out.println(nazwa + " wydał na drobne remonty " + wydatki.getTotalSpendings());
+
+            System.out.println(nazwa + " wydał na drobne remonty " + spendings.getMinor(id));
+            addLine();
         }
         if(avgSpendings){
-            System.out.println("łączne wydatki posłów kadencji " + kadencja + " to" + spendings.getAvgSpendings());
+            System.out.println("Średnie wydatki posłów kadencji " + kadencja + " to " + spendings.getAvgSpendings());
+            addLine();
         }
         if(mostTraveles){
             System.out.println(travelStatistcs.getMostTravels());
+            addLine();
         }
         if(mostDaysAbroad){
             System.out.println(travelStatistcs.getMostDaysAbroad());
+            addLine();
         }
         if(mostExpensiveTravels){
             System.out.println(travelStatistcs.getMostSpent());
+            addLine();
         }
         if(beenToItaly){
-            System.out.println(travelStatistcs.getBeenToItaly());
+            System.out.println("People who have been to Italy:\n " + travelStatistcs.getBeenToItaly());
         }
     }
 
-    private void getName(int i){
+    private void getName(int i) throws Exception {
         if(arguments[i].equals("-n")){
-            nazwa = arguments[i+1];
+            nazwa = arguments[i+1] + " " + arguments[i+2];
+            if (arguments[i+2].contains("-")){
+                throw new Exception("Enter full name");
+            }
         }
     }
 
@@ -122,7 +138,7 @@ public class ArgumentsParser {
                     throw new Exception("Kadencja has to be either 7 or 8");
                 }
             }catch (Exception e){
-                throw  new Exception("Cadency has to be a number");
+                throw  new Exception("Cadency has to be a number either 7 or 8");
             }
         }
     }

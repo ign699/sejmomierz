@@ -48,20 +48,10 @@ public class PoselWyjazdySummary {
         for(Wyjazdy wyjazd : wyjazdy.getDepartures().getWyjazdy()){
             Date startDate = df.parse(wyjazd.getOd());
             if(checkIfYearinCadency(getDateYear(startDate))){
-
-                if(Double.parseDouble(wyjazd.getKoszt_suma()) > mostExpesive) {
-                    mostExpesive = Double.parseDouble(wyjazd.getKoszt_suma());
-                }
-
-                Date endDate = df.parse(wyjazd.getDo());
-
-                if(getDaysDifference(startDate, endDate) > daysAbroad){
-                    daysAbroad = getDaysDifference(startDate, endDate);
-                }
-
                 numberOfDepartures++;
-
+                daysAbroad+=wyjazd.getLiczba_dni();
                 checkIfBeenToItaly(wyjazd);
+                updateMostExpensive(Double.parseDouble(wyjazd.getKoszt_suma()));
             }
         }
         name = wyjazdy.getData().getNazwa();
@@ -83,12 +73,11 @@ public class PoselWyjazdySummary {
         return calendar.get(Calendar.YEAR);
     }
 
-    private int getDaysDifference(Date date1, Date date2){
-        long diff = date2.getTime() - date1.getTime();
-        long tempDays = TimeUnit.DAYS.convert(diff, TimeUnit.MILLISECONDS);
-        return Math.toIntExact(tempDays);
+    private void updateMostExpensive(double price){
+        if(price > mostExpesive){
+            mostExpesive = price;
+        }
     }
-
     private boolean checkIfYearinCadency(int year){
         if(cadency==7 && year<2016){
             return true;

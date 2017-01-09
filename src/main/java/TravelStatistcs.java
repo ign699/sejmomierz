@@ -12,12 +12,12 @@ public class TravelStatistcs {
     private Map<String, String> mosts = new HashMap<String, String>();
     private int cadency;
     private double mostSpent = 0;
-    private String mostSpentName;
+    private String mostSpentName = "No one";
     private String beenToItaly ="";
     private int mostTravels = 0;
-    private String mostTravelsName;
+    private String mostTravelsName = "No one";
     private int mostDaysAbroad = 0;
-    private String mostDaysAbroadName;
+    private String mostDaysAbroadName = "No one";
     private NameToId ids = new NameToId();
     private LinkedList<Integer> list ;
 
@@ -53,7 +53,7 @@ public class TravelStatistcs {
         Properties properties = new Properties();
         properties.put("mostSpent", mostSpentName + " spent " + mostSpent);
         properties.put("beenToItaly", beenToItaly);
-        properties.put("mostDaysAbroad", mostDaysAbroadName + " spend " + mostDaysAbroad + " abroad");
+        properties.put("mostDaysAbroad", mostDaysAbroadName + " spend " + mostDaysAbroad + " days abroad");
         properties.put("mostTravels", mostTravelsName + " was on " + mostTravels +" travels");
 
         String path = "src/main/java/stats" + cadency + ".properties";
@@ -61,6 +61,7 @@ public class TravelStatistcs {
         properties.store(data, null);
         data.close();
     }
+
     private void updateMostSpent(PoselWyjazdySummary posel){
         if(posel.getMostExpesive() > mostSpent ){
             mostSpent = posel.getMostExpesive();

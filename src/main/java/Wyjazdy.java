@@ -9,6 +9,8 @@ public class Wyjazdy {
 
     private String od;
 
+    private int liczba_dni;
+
     private String koszt_suma;
 
     @SerializedName("do")
@@ -18,6 +20,7 @@ public class Wyjazdy {
     {
         return kraj;
     }
+
 
     public void setKraj (String kraj)
     {
@@ -51,5 +54,13 @@ public class Wyjazdy {
     public void setKoszt_suma (String koszt_suma)
     {
         this.koszt_suma = koszt_suma;
+    }
+
+    public int getLiczba_dni() {
+        return liczba_dni;
+    }
+
+    public void setLiczba_dni(int liczba_dni) {
+        this.liczba_dni = liczba_dni;
     }
 }

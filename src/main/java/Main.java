@@ -11,9 +11,13 @@ public class Main {
     public static void main(String[] args) throws Exception {
 
         final long startTime = System.nanoTime();
-        ArgumentsParser parser = new ArgumentsParser(args);
-        parser.parseArguemnts();
-        parser.run();
+        try {
+            ArgumentsParser argumentsParser = new ArgumentsParser(args);
+            argumentsParser.parseArguemnts();
+            argumentsParser.run();
+        }catch (Exception e){
+            System.err.println(e.getMessage());
+        }
         final long duration = System.nanoTime() - startTime;
         System.out.println(duration/1000000000);
     }
